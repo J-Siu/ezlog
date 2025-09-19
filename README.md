@@ -19,6 +19,8 @@ Follow Linux log level
 
 - v0.0.1
   - Initial commit
+- v0.0.2
+  - add SetTrace()
 
 ### License
 
