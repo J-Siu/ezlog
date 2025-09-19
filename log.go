@@ -57,6 +57,7 @@ var (
 type LogFunc func(msg *string)
 
 type log struct {
+	// log level func
 	emerg   LogFunc
 	alert   LogFunc
 	crit    LogFunc
@@ -66,6 +67,8 @@ type log struct {
 	info    LogFunc
 	debug   LogFunc
 	trace   LogFunc
+	// ---
+	msg LogFunc
 }
 
 // Get log level
@@ -103,6 +106,9 @@ func SetTrace(f LogFunc) { logger.trace = f }
 // Set DEBUG logging func
 func SetDebug(f LogFunc) { logger.debug = f }
 
+// Set Msg func
+func SetMsg(f LogFunc) { logger.msg = f }
+
 // --- string version func
 
 // Send EMERG
@@ -131,6 +137,11 @@ func Debug(msg string) { DebugP(&msg) }
 
 // Send TRACE
 func Trace(msg string) { TraceP(&msg) }
+
+// Send Message without log level control
+func Msg(msg string) {
+	MsgP(&msg)
+}
 
 // --- string pointer version func
 
@@ -194,5 +205,12 @@ func DebugP(msg *string) {
 func TraceP(msg *string) {
 	if logLevel >= TraceLevel && logger.trace != nil {
 		logger.trace(msg)
+	}
+}
+
+// Send Message without log level control
+func MsgP(msg *string) {
+	if logger.msg != nil {
+		logger.msg(msg)
 	}
 }
