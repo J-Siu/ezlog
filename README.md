@@ -13,7 +13,8 @@ Follow Linux log level
 6. Info
 7. Debug
 8. Trace
-9. Disable
+
+Disable is -1.
 
 ### Change Log
 
@@ -21,6 +22,9 @@ Follow Linux log level
   - Initial commit
 - v0.0.2
   - add SetTrace()
+- v0.0.3
+  - add comment
+  - fix log level logical bug, make disabled -1
 
 ### License
 
