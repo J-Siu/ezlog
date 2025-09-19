@@ -98,6 +98,10 @@ func (log *Log) SetInfo(f LogFunc) {
 	log.info = f
 }
 
+func (log *Log) SetTrace(f LogFunc) {
+	log.trace = f
+}
+
 func (log *Log) SetDebug(f LogFunc) {
 	log.debug = f
 }
