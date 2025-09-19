@@ -20,26 +20,25 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-/*
-ezlog - A simple log mapping module
-
-0 Emerg
-1 Alert
-2 Crit
-3 Err
-4 Warning
-5 Notice
-6 Info
-7 Debug
-8 Trace
-9 Disable
-*/
+// ezlog - A simple log mapping module
+//   - (-1 Disable)
+//   - 0 Emerg
+//   - 1 Alert
+//   - 2 Crit
+//   - 3 Err
+//   - 4 Warning
+//   - 5 Notice
+//   - 6 Info
+//   - 7 Debug
+//   - 8 Trace
 package ezlog
 
 type Level int8
 
+// ezlog log level
 const (
-	EmergLevel Level = iota
+	Disabled Level = iota - 1
+	EmergLevel
 	AlertLevel
 	CritLevel
 	ErrLevel
@@ -48,17 +47,16 @@ const (
 	InfoLevel
 	DebugLevel
 	TraceLevel
-	Disabled
 )
 
 var (
-	logLevel = Level(Disabled)
-	Logger   = new(Log)
+	logLevel = Disabled
+	logger   = new(log)
 )
 
 type LogFunc func(msg *string)
 
-type Log struct {
+type log struct {
 	emerg   LogFunc
 	alert   LogFunc
 	crit    LogFunc
@@ -70,138 +68,131 @@ type Log struct {
 	trace   LogFunc
 }
 
-func (log *Log) SetEmerg(f LogFunc) {
-	log.emerg = f
-}
+// Get log level
+func LogLevel() Level { return logLevel }
 
-func (log *Log) SetAlert(f LogFunc) {
-	log.alert = f
-}
+// Set log level
+func SetLogLevel(level Level) { logLevel = level }
 
-func (log *Log) SetCrit(f LogFunc) {
-	log.crit = f
-}
+// --- Set func
 
-func (log *Log) SetErr(f LogFunc) {
-	log.err = f
-}
+// Set EMERG logging func
+func SetEmerg(f LogFunc) { logger.emerg = f }
 
-func (log *Log) SetWarning(f LogFunc) {
-	log.warning = f
-}
+// Set ALERT logging func
+func SetAlert(f LogFunc) { logger.alert = f }
 
-func (log *Log) SetNotice(f LogFunc) {
-	log.notice = f
-}
+// Set CRIT logging func
+func SetCrit(f LogFunc) { logger.crit = f }
 
-func (log *Log) SetInfo(f LogFunc) {
-	log.info = f
-}
+// Set ERR logging func
+func SetErr(f LogFunc) { logger.err = f }
 
-func (log *Log) SetTrace(f LogFunc) {
-	log.trace = f
-}
+// Set WARNING logging func
+func SetWarning(f LogFunc) { logger.warning = f }
 
-func (log *Log) SetDebug(f LogFunc) {
-	log.debug = f
-}
+// Set NOTICE logging func
+func SetNotice(f LogFunc) { logger.notice = f }
 
-func Emerg(msg string) {
-	if logLevel >= EmergLevel && Logger.emerg != nil {
-		Logger.emerg(&msg)
-	}
-}
-func Alert(msg string) {
-	if logLevel >= AlertLevel && Logger.alert != nil {
-		Logger.alert(&msg)
-	}
-}
-func Crit(msg string) {
-	if logLevel >= CritLevel && Logger.crit != nil {
-		Logger.crit(&msg)
-	}
-}
-func Err(msg string) {
-	if logLevel >= ErrLevel && Logger.err != nil {
-		Logger.err(&msg)
-	}
-}
-func Warning(msg string) {
-	if logLevel >= WarningLevel && Logger.warning != nil {
-		Logger.warning(&msg)
-	}
-}
-func Notice(msg string) {
-	if logLevel >= NoticeLevel && Logger.notice != nil {
-		Logger.notice(&msg)
-	}
-}
-func Info(msg string) {
-	if logLevel >= InfoLevel && Logger.info != nil {
-		Logger.info(&msg)
-	}
-}
-func Debug(msg string) {
-	if logLevel >= DebugLevel && Logger.debug != nil {
-		Logger.debug(&msg)
-	}
-}
-func Trace(msg string) {
-	if logLevel >= TraceLevel && Logger.trace != nil {
-		Logger.trace(&msg)
-	}
-}
+// Set INFO logging func
+func SetInfo(f LogFunc) { logger.info = f }
 
-func LogLevel() Level {
-	return logLevel
-}
+// Set TRACE logging func
+func SetTrace(f LogFunc) { logger.trace = f }
 
-func SetLogLevel(level Level) {
-	logLevel = level
-}
+// Set DEBUG logging func
+func SetDebug(f LogFunc) { logger.debug = f }
 
+// --- string version func
+
+// Send EMERG
+func Emerg(msg string) { EmergP(&msg) }
+
+// Send ALERT
+func Alert(msg string) { AlertP(&msg) }
+
+// Send CRIT
+func Crit(msg string) { CritP(&msg) }
+
+// Send ERR
+func Err(msg string) { ErrP(&msg) }
+
+// Send WARNING
+func Warning(msg string) { WarningP(&msg) }
+
+// Send NOTICE
+func Notice(msg string) { NoticeP(&msg) }
+
+// Send INFO
+func Info(msg string) { InfoP(&msg) }
+
+// Send DEBUG
+func Debug(msg string) { DebugP(&msg) }
+
+// Send TRACE
+func Trace(msg string) { TraceP(&msg) }
+
+// --- string pointer version func
+
+// Send EMERG
 func EmergP(msg *string) {
-	if logLevel >= EmergLevel && Logger.emerg != nil {
-		Logger.emerg(msg)
+	if logLevel >= EmergLevel && logger.emerg != nil {
+		logger.emerg(msg)
 	}
 }
+
+// Send ALERT
 func AlertP(msg *string) {
-	if logLevel >= AlertLevel && Logger.alert != nil {
-		Logger.alert(msg)
+	if logLevel >= AlertLevel && logger.alert != nil {
+		logger.alert(msg)
 	}
 }
+
+// Send CRIT
 func CritP(msg *string) {
-	if logLevel >= CritLevel && Logger.crit != nil {
-		Logger.crit(msg)
+	if logLevel >= CritLevel && logger.crit != nil {
+		logger.crit(msg)
 	}
 }
+
+// Send ERR
 func ErrP(msg *string) {
-	if logLevel >= ErrLevel && Logger.err != nil {
-		Logger.err(msg)
+	if logLevel >= ErrLevel && logger.err != nil {
+		logger.err(msg)
 	}
 }
+
+// Send WARNING
 func WarningP(msg *string) {
-	if logLevel >= WarningLevel && Logger.warning != nil {
-		Logger.warning(msg)
+	if logLevel >= WarningLevel && logger.warning != nil {
+		logger.warning(msg)
 	}
 }
+
+// Send Notice
 func NoticeP(msg *string) {
-	if logLevel >= NoticeLevel && Logger.notice != nil {
-		Logger.notice(msg)
+	if logLevel >= NoticeLevel && logger.notice != nil {
+		logger.notice(msg)
 	}
 }
+
+// Send Info
 func InfoP(msg *string) {
-	if logLevel >= InfoLevel && Logger.info != nil {
-		Logger.info(msg)
+	if logLevel >= InfoLevel && logger.info != nil {
+		logger.info(msg)
 	}
 }
+
+// Send DEBUG
 func DebugP(msg *string) {
-	if logLevel >= DebugLevel && Logger.debug != nil {
-		Logger.debug(msg)
+	if logLevel >= DebugLevel && logger.debug != nil {
+		logger.debug(msg)
 	}
 }
+
+// Send TRACE
 func TraceP(msg *string) {
-	if logLevel >= TraceLevel && Logger.trace != nil {
-		Logger.trace(msg)
+	if logLevel >= TraceLevel && logger.trace != nil {
+		logger.trace(msg)
 	}
 }
