@@ -25,6 +25,8 @@ Disable is -1.
 - v0.0.3
   - add comment
   - fix log level logical bug, make disabled -1
+- v0.0.4
+  - add Msg()
 
 ### License
 
